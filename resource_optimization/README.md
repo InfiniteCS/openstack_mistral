@@ -48,7 +48,7 @@ create_snapshot:
 
 send_email: 
   
-  Our Yaml is more worthy when the ability to notify a cloud administrator. In order to do that we need action called “std.email”. After words delete part being executed.
+  Our YAML is more worthy when the ability to notify a cloud administrator. In order to do that we need action called “std.email”. After words delete part being executed.
 
 delete_vm:
   
@@ -80,6 +80,6 @@ $ mistral workflow-create delete_vm.yaml
 Note: In order to print all available workflows run: 
 $ mistral workflow-list
 
-2. Running the workflow
+2. Executing the Workflow
 
 $ mistral execution-create delete_vm delete_input.json
