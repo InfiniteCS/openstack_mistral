@@ -1,0 +1,100 @@
+---
+version: '2.0'
+
+delete_vm:
+  type: direct
+
+  input:
+    - from_email
+    - to_email
+    - smtp_server
+    - smtp_password 
+    - backup_type
+    - rotation 
+
+  tasks:
+    shutoff_vm_detail:
+      description: Collecting all shutoff instance details.
+      action: nova.servers_list
+      publish:
+        shutoff_instance_date: <% task(shutoff_vm_detail).result.where($.status = 'SHUTOFF').updated %>
+        shutoff_instance_length: <% task(shutoff_vm_detail).result.where($.status = 'SHUTOFF').updated.len() %>
+        shutoff_vm_ids: <% task(shutoff_vm_detail).result.where($.status = 'SHUTOFF').id %>
+        shutoff_vm_names: <% task(shutoff_vm_detail).result.where($.status = 'SHUTOFF').name %>
+        shutoff_vm_ip: <% task(shutoff_vm_detail).result.where($.status = 'SHUTOFF').select({ip => $.addresses.get($.addresses.keys().first()).where($.get("OS-EXT-IPS:type") = floating).first().addr}).ip %> 
+      keep-result: false
+      on-success:
+        - calculate_hours
+
+    calculate_hours:
+      description: This task is to get idle state fo the machine(In shutoff state for more than 24 hours).
+      action: std.javascript
+      input:
+        context: <% $ %>
+        script: |
+           
+            var today_date = new Date();
+            var vm_ids = [];
+            var vm_names = [];
+            var vm_ips = [];
+            for(var i=0; i<$.shutoff_instance_length; i++)
+            {
+            var shutoff_date = $.shutoff_instance_date[i];
+            var shutoff_date = new Date(shutoff_date);
+            var hours = Math.abs(today_date - shutoff_date) / 36e5;
+            if ( hours > 24) 
+            {
+            vm_ids.push($.shutoff_vm_ids[i]);
+            vm_names.push($.shutoff_vm_names[i]);
+            vm_ips.push($.shutoff_vm_ip[i]);
+            }
+            }
+            return [vm_ids,vm_names,vm_ips];
+
+      keep-result: false
+      publish:
+        ids: <% task(calculate_hours).result[0] %>
+        names: <% task(calculate_hours).result[1] %>
+        ips: <% task(calculate_hours).result[2] %>
+      on-complete:
+        - create_snapshot
+
+    create_snapshot:
+      description: creating backup before deleting.
+      with-items:
+        - snap_name in <% $.names %>
+        - snap_id in <% $.ids %>
+      action: nova.servers_backup server=<% $.snap_id %> backup_name=<% $.snap_name  %> backup_type=<% $.backup_type %> rotation=<% $.rotation %>
+      on-success:
+        - send_email
+
+    send_email:
+      description: Sending notification to user.
+      with-items:
+        - delete_name in <% $.names %>
+        - delete_ip in <% $.ips %> 
+      action: std.email
+      input:
+        subject: Notification Mail for deleting VM.
+        body: |
+          This is a alerting mail that following VM is being in shutoff state for more than 24-Hrs so it will be deleted in another one minute.
+          VM Information:
+             Vm_Name: <% $.delete_name %>
+             IP-address: <% $.delete_ip %>
+            
+          
+          Note: Created backup for the machine <% $.delete_name %>
+
+          -- Thanks
+        from_addr: <% $.from_email %>
+        to_addrs: [<% $.to_email %>]
+        smtp_server: <% $.smtp_server %>
+        smtp_password: <% $.smtp_password %>
+      wait-after: 60
+      on-complete:
+        - delete_vm
+
+    delete_vm:
+      description: Destroy Vm.
+      with-items: id in <% $.ids %>
+      action: nova.servers_delete server=<% $.id %>

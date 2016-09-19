@@ -1,0 +1,9 @@
+{
+          "from_email": "sample@sample.com",
+          "to_email": "sample@sample.com",
+          "smtp_server": "your_smtpserver",
+          "smtp_password": "your_smtppassword",
+          "backup_type": "once",
+          "rotation":"1"
+
+}
