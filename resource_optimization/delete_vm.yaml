@@ -27,7 +27,7 @@ delete_vm:
         - calculate_hours
 
     calculate_hours:
-      description: This task is to get idle state fo the machine(In shutoff state for more than 24 hours).
+      description: This task is to get shutoff state of the VMs.(If shutoff state for more than 24 hours).
       action: std.javascript
       input:
         context: <% $ %>
