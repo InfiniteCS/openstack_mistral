@@ -35,27 +35,27 @@ Before jumping into the installation part disable ssl verfication of git by exec
 
 * **shutoff_vm_detail:**
 
-  This task calls Nova action “**nova.servers_list**” that returns information about all servers in a tenant as JSON list. What we really need here is to extract instance shuttoff date, number of machine in shutoff state, VM IDs, VM names and IP addresses. In order to do that we need to declare clause that holds data in respective variables.
+  This task calls Nova action "**nova.servers_list**" that returns information about all servers in a tenant as JSON list. What we really need here is to extract instance shuttoff date, number of machine in shutoff state, VM IDs, VM names and IP addresses. In order to do that we need to declare clause that holds data in respective variables.
   
   In this task we are using special task property assigned with so that the result doesnre not interested in all information that Nova returns, only shutoff date, number of machine in shutoff state, VM IDs, VM names, and IPs,  are relevant. This makes sense to do because even if we have a tenant with 30-40 virtual servers all information about them returned by Nova will take ~100 KB of disk space. 
 
 * **calculate_hours:**
 
-  This task uses Java action “**std.javascript**” by using java script will get the current date of the machine then for loop used for calculating the VMs shoutoff timings in hours one by one. After that if any of the machine is in shutfoff state for more than 24 hours then statements inside the if loop will be executed eventually it will return VM IDs, VM names, and VM Ips.
+  This task uses Java action "**std.javascript**" by using java script will get the current date of the machine then for loop used for calculating the VMs shoutoff timings in hours one by one. After that if any of the machine is in shutfoff state for more than 24 hours then statements inside the if loop will be executed eventually it will return VM IDs, VM names, and VM Ips.
 
   In order to use the variables(vm_ids,vm_names,vm_ips) outside the java script, we need to pulish it into variables(ids,names,ips). After completing this task yaml goes into next task.
 
 * **create_snapshot:** 
 
- In this yaml part contains the action called "**nova.servers_backup**”. The role of this is action is taking the backup when it becomes more safer side before deleting it. once this job is done calls the next action.
+ In this yaml part contains the action called "**nova.servers_backup**". The role of this is action is taking the backup when it becomes more safer side before deleting it. once this job is done calls the next action.
 
 * **send_email:** 
   
-  Our YAML is more worthy when the ability to notify a cloud administrator. In order to do that we need action called “**std.email**”. After words delete part being executed.
+  Our YAML is more worthy when the ability to notify a cloud administrator. In order to do that we need action called "**std.email**". After words delete part being executed.
 
 * **delete_vm:**
   
-  In this part we calls Nova action “**nova.servers_delete**”. Here we are using special task it is functionality to iterate over a list of server id to delete the VMs.
+  In this part we calls Nova action "**nova.servers_delete**". Here we are using special task it is functionality to iterate over a list of server id to delete the VMs.
 
 Last but not the least, this script only works if we passed data that is needed to send an email and taking backup, Json file as an input parameter.
 
