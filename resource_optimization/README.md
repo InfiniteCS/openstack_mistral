@@ -1,4 +1,4 @@
-# Resource optimization using YAML
+# Resource optimization using Mistral YAML
 
 
 These example demonstrate how to use OpenStack Mistral actions in Mistral workflow to delete the VMs which is in SHUTOFF state for more than 24Hrs.
