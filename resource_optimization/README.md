@@ -1,8 +1,8 @@
 These example demonstrate how to use OpenStack Mistral actions in Mistral workflow to delete the VMs which is in SHUTOFF state for more than 24Hrs.
 
 Prerequisites:
-        * Openstack with mistral setup(Ubuntu 14.04).
-        * PyV8 Engine.
+                     * Openstack with mistral setup(Ubuntu 14.04).
+                     * PyV8 Engine.
 
 In order to use Java script inside the YAML need to install PyV8 engine, steps are as follow.
 Before jumping into the installation part disable ssl verfication of git by execute the following command.
