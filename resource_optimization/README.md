@@ -59,7 +59,7 @@ Before jumping into the installation part disable ssl verfication of git by exec
 
 Last but not the least, this script only works if we passed data that is needed to send an email and taking backup, Json file as an input parameter.
 
-The *_delete_input_*.json content are as followed:
+The *_delete_input.json_* content are as followed:
 
       {
        "from_email": "form_email@example.com",
