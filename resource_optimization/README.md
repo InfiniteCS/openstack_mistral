@@ -69,9 +69,9 @@ The *_delete_input.json_* content are as followed:
        "backup_type": "once",
        "rotation":"1"
        }         
-// Replace the input with valid parameters. In our case we used gmail smtp server  ( smtp.gmail.com:587 ) for sending mail from our gmail account. In order to use gmail go to this below link 
+// Replace the input with valid parameters. In our case we used gmail smtp server  ( smtp.gmail.com:587 ) for sending mail from our gmail account. In order to use gmail go to this link 
        https://www.google.com/settings/security/lesssecureapps
-Make sure that Access for less secure apps should be “**Trun on**” and use your gmail ID and password in the input parameter.
+and make sure that Access for less secure apps should be “**Trun on**” and use your gmail ID and password in the input parameter.
 
 
 ## Taking into Practical part: 
