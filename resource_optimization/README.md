@@ -29,7 +29,7 @@ Before jumping into the installation part disable ssl verfication of git by exec
 ```
  **Note:** If you had any issue in Java PyV8 engine while executing the yaml do this additionally. **Restart your machine** 
 
-**Yaml in a nutshell**: It contains five tasks namely shutoff_vm_detail, calculate_hours, create_snapshot send_email and delete_vm. Each and every tasks having mistral actions. 
+**Yaml in a nutshell**: It contains five tasks namely shutoff_vm_detail, calculate_hours, create_snapshot, send_email and delete_vm. Each and every tasks having mistral actions. 
 
 ## Following are the brief of every actions:
 
