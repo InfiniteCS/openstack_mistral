@@ -77,7 +77,7 @@ delete_vm:
       input:
         subject: Notification Mail for deleting VM.
         body: |
-          This is a alerting mail that following VM is being in shutoff state for more than 24-Hrs so it will be deleted in another couple of minutes.
+          This is an alerting mail that following VM is being in shutoff state for more than 24-Hrs so it will be deleted in another couple of minutes.
           VM Information:
              Vm_Name: <% $.delete_name %>
              IP-address: <% $.delete_ip %>
